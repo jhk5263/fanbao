@@ -1,0 +1,159 @@
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+    <title>反包数据</title>
+    <!-- Favicon -->
+    <link rel="icon" href="img/fanbao/favicon.png" type="image/png" sizes="32x32">
+    <!-- All CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/aos.min.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/magnific.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/select2.min.css">
+    <link rel="stylesheet" href="css/slimmenu.min.css">
+    <link rel="stylesheet" href="css/style2.css">
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+<body onload="zairu()">
+      <main class="main-content-area" >
+
+         <!--job-categories-area-start -->
+         <div class="job-categories-area bg-color2 pt-100 pb-100 clearfix">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="section-title text-left" style="margin-bottom:10px;margin-top:-50px" id="tou">
+
+                     </div>
+                  </div>
+               </div>
+               
+               
+               
+               <div class="cat-list-items">
+                  <div class="row" id='biaoqian'>
+
+
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--job-categories-area-end -->
+         
+
+      <!-- ==================== END PRELOADER HERE ===================================== -->    
+      <!-- ====================ALL JS FILE HERE===================================== -->
+      <!-- jQuery -->
+     <script src="js/jquery-3.4.1.min.js"></script>
+     <script src="js/bootstrap.min.js"></script>
+     <script src="js/proper.js"></script>
+     <script src="js/jquery.waypoints.min.js"></script>
+     <script src="js/owl.carousel.min.js"></script>
+     <script src="js/magnific.min.js"></script>
+     <script src="js/typing.min.js"></script>
+     <script src="js/select2.min.js"></script>
+     <script src="js/aos.min.js"></script>
+     <script src="js/slimmenu.min.js"></script>
+     <!-- vendor 
+      <script src="assets/js/vendor.min.js"></script>
+      -->
+      <script src="js/app.js"></script>  
+      <script>
+        function checkTime(i){
+         if (i<10) 
+          {i="0" + i}
+          
+          return i
+         
+        };
+        
+      function zairu(){
+        var d =new Date();
+        var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
+        var tou = document.getElementById("tou");
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
+        tou.innerHTML=jia;    
+        var biaoqian = document.getElementById("biaoqian");
+        var neirong=''
+        sql='select * from fanbao'
+        $.ajax({
+            type:"post",//请求服务器载入数据
+            async: false,
+            url:"/mdata.php",
+            data:{
+              "sql": sql
+            },
+            dataType:'html',
+            success:function(co){
+                co=co.slice(20)
+                xw=JSON.parse(co)
+                shijian=xw[0]['shijian']
+                for(var i=0;i<xw.length;i++){
+                    dm=xw[i]['guid']
+                  $.ajax({
+                        type:"get",//请求服务器载入数据
+                        async: false,
+                        url:"https://qt.gtimg.cn/q=s_sz"+dm,
+                                         dataType:'html',//服务器返回json格式数据
+                                         crossDomain: true,
+                                         //data:"{}",                           
+                        success:function(xin){
+                           cf = xin.split("~");
+                           mz=cf[1];
+                            $.ajax({
+                                type:"get",//请求服务器载入数据
+                                async: false,
+                                url:'https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History',
+                                dataType:'html',
+                                success:function(co1){
+                                    shuju=JSON.parse(co1);
+                                    zuojj = shuju.trend[0][3] * 100
+                                    $.ajax({
+                                        type:"get",//请求服务器载入数据
+                                        async: false,
+                                        url:'https://apphq.longhuvip.com/w1/api/index.php?DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&State=1&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrendIncremental&apiv=w30&c=StockL2Data',                                        dataType:'html',
+                                        success:function(co2){
+                                            shuju1=JSON.parse(co2);
+                                            jjj = shuju1.trend[0][3] * 100
+  
+                                            shuzu=[]
+                                            shuzu.push(zuojj)
+                                            shuzu.push(jjj)
+                                            max=Math.max.apply(null, shuzu);
+                                            console.log(max)
+                                            zuo=((45/max)*zuojj).toFixed(2);
+                                            jin=((45/max)*jjj).toFixed(2);
+                                            tu='<div style="background-color:#ef5350;height:'+zuo+';width:12%;text-align:center;"></div>'
+                                            tu=tu+'<div style="background-color:#ef5350;height:'+jin+';width:12%;text-align: center;margin-left: -70%;"></div>'
+                                            neirong=neirong+'<div class="col-md-4" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:18px">'+dm+'|'+mz+'<span style="font-size:14px">昨日竞价量：'+zuojj+'</span><span style="font-size:14px">今日竞价量：'+jjj+'</span></h4></div></div></div>'
+
+                                        }
+                                    })
+                                }
+                            })
+                                    
+                                    
+                                    
+                                }
+                           })
+                           
+                        }
+            }
+                    })
+                
+
+        
+        
+
+        
+        biaoqian.innerHTML=neirong;
+        
+      }
+     </script>   
+     
+   
+
+
+</body></html>
