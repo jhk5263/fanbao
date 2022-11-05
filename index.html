@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/style2.css">
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-<body onload="zairu()">
+<body onload="zairu1()">
       <main class="main-content-area" >
 
          <!--job-categories-area-start -->
@@ -68,15 +68,41 @@
           return i
          
         };
-        function getNextDate(date, day,callback){
-                var dd = new Date(date);
-                dd.setDate(dd.getDate() + day);
-                var y = dd.getFullYear();
-                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
-                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
-                var changedate = y + "-" + m + "-" + d;
-                return changedate
-            }; 
+function getNextDate(date, day,callback){
+        var dd = new Date(date);
+        dd.setDate(dd.getDate() + day);
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+        var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+        var changedate = y + "-" + m + "-" + d;
+        return changedate
+};
+function listSortBy(arr, field, order){
+    var refer = [], result=[], order = order=='asc'?'asc':'desc', index;
+    for(i=0; i<arr.length; i++){
+        refer[i] = arr[i][field]+':'+i;
+    }
+        refer.sort(function (a,b) {
+            a=parseFloat(a);
+            b=parseFloat(b);
+            if (a < b ) {    
+                return -1;
+            }
+            if (a > b ) {
+                return 1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+
+
+    if(order=='desc') refer.reverse();
+    for(i=0;i<refer.length;i++){
+        index = refer[i].split(':')[1];
+        result[i] = arr[index];
+    }
+    return result;
+}
 function numFormat(num){
     num=num.toString().split(".");  // 分隔小数点
     var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
@@ -94,17 +120,18 @@ function numFormat(num){
       res=res.join("");
     }
     return res;
-}    
-      function zairu(){
+}            
+function zairu(){
         var d =new Date();
         var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
         var tou = document.getElementById("tou");
         zuotian=getNextDate(time,-1);
-
-        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
         tou.innerHTML=jia;    
         var biaoqian = document.getElementById("biaoqian");
         var neirong=''
+        var heji=[];
+        var zbk=[];
         //sql="select * from fanbao where shijian='"+zuotian+"'"
         $.ajax({
             type:"post",//请求服务器载入数据
@@ -153,14 +180,22 @@ function numFormat(num){
                                             shuzu.push(zuojj)
                                             shuzu.push(jjj)
                                             max=Math.max.apply(null, shuzu);
-
                                             zuo=((45/max)*zuojj).toFixed(2);
                                             jin=((45/max)*jjj).toFixed(2);
-					    zuojj=numFormat(zuojj);
+                                            chazhi=Number(zuojj)/Number(jjj)
+                                            zuojj=numFormat(zuojj);
                                             jjj=numFormat(jjj);
-                                            tu='<div style="background-color:#ef5350;height:'+jin+';width:12%;text-align:center;"></div>'
-                                            tu=tu+'<div style="background-color:#ef5350;height:'+zuo+';width:12%;text-align: center;margin-left: -70%;"></div>'
-                                            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+dm+'|'+mz+'<span style="font-size:10px;font-weight:bolder">【'+bankuai+'】<span style="font-size:14px">昨日竞价量：'+zuojj+'</span><span style="font-size:14px">今日竞价量：'+jjj+'</span></h4></div></div></div>'
+                                            var row = {};
+                                            row.jin = jin;
+                                            row.zuo = zuo;
+                                            row.dm = dm;
+                                            row.mz = mz;
+                                            row.bankuai = bankuai;
+                                            row.zuojj = zuojj;
+                                            row.jjj = jjj;
+                                            row.chazhi = chazhi
+                                            heji.push(row)
+
 
                                         }
                                     })
@@ -175,17 +210,130 @@ function numFormat(num){
                         }
             }
                     })
-                
+        heji=listSortBy(heji,'chazhi','asc');
 
-        
-        
-
-        
+        for(var cc=0;cc<heji.length;cc++){
+            tu='<div style="background-color:#ef5350;height:'+heji[cc]['jin']+';width:12%;text-align:center;"></div>'
+            tu=tu+'<div style="background-color:#ef5350;height:'+heji[cc]['zuo']+';width:12%;text-align: center;margin-left: -70%;"></div>'
+            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+heji[cc]['dm']+'|'+heji[cc]['mz']+'<span style="font-size:8px;font-weight:bolder">【'+heji[cc]['bankuai']+'】<span style="font-size:14px;">昨日竞价量：'+heji[cc]['zuojj']+'</span><span style="font-size:14px">今日竞价量：'+heji[cc]['jjj']+'</span></h4></div></div></div>'
+        }
         biaoqian.innerHTML=neirong;
         
-      }
+}
    
-      
+function zairu1(){
+        var d =new Date();
+        var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
+        var tou = document.getElementById("tou");
+        zuotian=getNextDate(time,-1);
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
+        tou.innerHTML=jia;    
+        var biaoqian = document.getElementById("biaoqian");
+        var neirong=''
+        var heji=[];
+        var zbk=[];
+        //sql="select * from fanbao where shijian='"+zuotian+"'"
+for(var aa=1;aa<6;aa++){
+        $.ajax({
+            type:"post",//请求服务器载入数据
+            async: false,
+            url:"https://apphis.longhuvip.com/w1/api/index.php?Day=2022-11-03&Index=0&Order=0&PhoneOSNew=2&PidType="+aa+"&Type=4&VerSion=5.7.0.5&a=DailyLimitPerformance2&apiv=w31&c=HisHomeDingPan&st=1000",
+            dataType:'html',
+            success:function(co){
+                xw=JSON.parse(co);
+               // console.log(xw.info[0].length)
+                shijian='2022-11-03'
+                for(var i=0;i<xw.info[0].length;i++){
+                    dm=xw.info[0][i][0]
+
+                     if(dm.slice(0,2)=="00"){
+   
+
+                    
+                    bankuai=xw.info[0][i][6]
+                    cf=xw.info[0][i][6].split("、");
+                    zbk.push(cf[0])
+                    zbk.push(cf[1])
+
+     	            $.ajax({
+                        type:"get",//请求服务器载入数据
+                        async: false,
+                        url:"https://qt.gtimg.cn/q=s_sz"+dm,
+                        dataType:'html',//服务器返回json格式数据
+                        crossDomain: true,
+                         //data:"{}",                           
+                        success:function(xin){
+                           cf = xin.split("~");
+                           mz=cf[1];
+                            $.ajax({
+                                type:"get",//请求服务器载入数据
+                                async: false,
+                                url:'https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History',
+                                dataType:'html',
+                                success:function(co1){
+                                    shuju=JSON.parse(co1);
+                                    zuojj = shuju.trend[0][3] * 100
+                                    $.ajax({
+                                        type:"get",//请求服务器载入数据
+                                        async: false,
+                                        url:'https://apphq.longhuvip.com/w1/api/index.php?DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&State=1&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrendIncremental&apiv=w30&c=StockL2Data',                                        
+                                        dataType:'html',
+                                        success:function(co2){
+                                            shuju1=JSON.parse(co2);
+                                            jjj = shuju1.trend[0][3] * 100
+  
+                                            shuzu=[]
+                                            shuzu.push(zuojj)
+                                            shuzu.push(jjj)
+                                            
+                                            max=Math.max.apply(null, shuzu);
+
+                                            zuo=((45/max)*zuojj).toFixed(2);
+                                            jin=((45/max)*jjj).toFixed(2);
+                                            chazhi=Number(zuojj)/Number(jjj)
+                                            zuojj=numFormat(zuojj);
+                                            jjj=numFormat(jjj);
+                                            var row = {};
+                                            row.jin = jin;
+                                            row.zuo = zuo;
+                                            row.dm = dm;
+                                            row.mz = mz;
+                                            row.bankuai = bankuai;
+                                            row.zuojj = zuojj;
+                                            row.jjj = jjj;
+                                            row.chazhi = chazhi
+                                            heji.push(row)
+
+
+
+                                        }
+                                    })
+                                }
+                            })
+                                    
+                                    
+                                    
+                                }
+                           })
+                           
+                        }
+            } 
+            }
+                    })
+
+
+        
+        
+}
+        heji=listSortBy(heji,'chazhi','asc');
+
+        for(var cc=0;cc<heji.length;cc++){
+            tu='<div style="background-color:#ef5350;height:'+heji[cc]['jin']+';width:12%;text-align:center;"></div>'
+            tu=tu+'<div style="background-color:#ef5350;height:'+heji[cc]['zuo']+';width:12%;text-align: center;margin-left: -70%;"></div>'
+            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+heji[cc]['dm']+'|'+heji[cc]['mz']+'<span style="font-size:8px;font-weight:bolder">【'+heji[cc]['bankuai']+'】<span style="font-size:14px;">昨日竞价量：'+heji[cc]['zuojj']+'</span><span style="font-size:14px">今日竞价量：'+heji[cc]['jjj']+'</span></h4></div></div></div>'
+        }
+        biaoqian.innerHTML=neirong;
+}      
       
       
 </script>	  
