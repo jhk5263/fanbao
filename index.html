@@ -76,13 +76,31 @@
                 var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
                 var changedate = y + "-" + m + "-" + d;
                 return changedate
-            };        
+            }; 
+function numFormat(num){
+    num=num.toString().split(".");  // 分隔小数点
+    var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
+    var res=[];
+    for(var i=0,len=arr.length;i<len;i++){
+      if(i%3===0&&i!==0){
+         res.push(",");   // 添加分隔符
+      }
+      res.push(arr[i]);
+    }
+    res.reverse(); // 再次倒序成为正确的顺序
+    if(num[1]){  // 如果有小数的话添加小数部分
+      res=res.join("").concat("."+num[1]);
+    }else{
+      res=res.join("");
+    }
+    return res;
+}    
       function zairu(){
         var d =new Date();
         var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
         var tou = document.getElementById("tou");
         zuotian=getNextDate(time,-1);
-        console.log(zuotian)
+
         jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
         tou.innerHTML=jia;    
         var biaoqian = document.getElementById("biaoqian");
@@ -135,9 +153,11 @@
                                             shuzu.push(zuojj)
                                             shuzu.push(jjj)
                                             max=Math.max.apply(null, shuzu);
-                                            console.log(max)
+
                                             zuo=((45/max)*zuojj).toFixed(2);
                                             jin=((45/max)*jjj).toFixed(2);
+					    zuojj=numFormat(zuojj);
+                                            jjj=numFormat(jjj);
                                             tu='<div style="background-color:#ef5350;height:'+jin+';width:12%;text-align:center;"></div>'
                                             tu=tu+'<div style="background-color:#ef5350;height:'+zuo+';width:12%;text-align: center;margin-left: -70%;"></div>'
                                             neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+dm+'|'+mz+'<span style="font-size:10px;font-weight:bolder">【'+bankuai+'】<span style="font-size:14px">昨日竞价量：'+zuojj+'</span><span style="font-size:14px">今日竞价量：'+jjj+'</span></h4></div></div></div>'
