@@ -1,11 +1,11 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-     <meta charset="UTF-8">
-    <title>每日反包数据</title>
-
+        <meta charset="UTF-8">
+    <title>反包数据</title>
+    <!-- Favicon -->
     <link rel="icon" href="img/fanbao/favicon.png" type="image/png" sizes="32x32">
-
+    <!-- All CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/aos.min.css">
     <link rel="stylesheet" href="css/fontawesome-all.min.css">
@@ -14,11 +14,12 @@
     <link rel="stylesheet" href="css/select2.min.css">
     <link rel="stylesheet" href="css/slimmenu.min.css">
     <link rel="stylesheet" href="css/style2.css">
-
+    <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
 <body onload="zairu()">
       <main class="main-content-area" >
 
+         <!--job-categories-area-start -->
          <div class="job-categories-area bg-color2 pt-100 pb-100 clearfix">
             <div class="container">
                <div class="row">
@@ -39,58 +40,76 @@
                </div>
             </div>
          </div>
+         <!--job-categories-area-end -->
+         
 
-     <script src="js/jquery-3.4.1.min.js"></script>
-     <script src="js/bootstrap.min.js"></script>
-     <script src="js/proper.js"></script>
-     <script src="js/jquery.waypoints.min.js"></script>
-     <script src="js/owl.carousel.min.js"></script>
-     <script src="js/magnific.min.js"></script>
-     <script src="js/typing.min.js"></script>
-     <script src="js/select2.min.js"></script>
-     <script src="js/aos.min.js"></script>
-     <script src="js/slimmenu.min.js"></script>
-
+      <!-- ==================== END PRELOADER HERE ===================================== -->		
+      <!-- ====================ALL JS FILE HERE===================================== -->
+      <!-- jQuery -->
+	  <script src="js/jquery-3.4.1.min.js"></script>
+	  <script src="js/bootstrap.min.js"></script>
+	  <script src="js/proper.js"></script>
+	  <script src="js/jquery.waypoints.min.js"></script>
+	  <script src="js/owl.carousel.min.js"></script>
+	  <script src="js/magnific.min.js"></script>
+	  <script src="js/typing.min.js"></script>
+	  <script src="js/select2.min.js"></script>
+	  <script src="js/aos.min.js"></script>
+	  <script src="js/slimmenu.min.js"></script>
+	  <!-- vendor 
+      <script src="assets/js/vendor.min.js"></script>
+	   -->
       <script src="js/app.js"></script>  
       <script>
         function checkTime(i){
-         if (i<10) 
+        	if (i<10) 
           {i="0" + i}
           
           return i
          
         };
-        
+        function getNextDate(date, day,callback){
+                var dd = new Date(date);
+                dd.setDate(dd.getDate() + day);
+                var y = dd.getFullYear();
+                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+                var changedate = y + "-" + m + "-" + d;
+                return changedate
+            };        
       function zairu(){
         var d =new Date();
         var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
         var tou = document.getElementById("tou");
-        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
+        zuotian=getNextDate(time,-1);
+        console.log(zuotian)
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
         tou.innerHTML=jia;    
         var biaoqian = document.getElementById("biaoqian");
         var neirong=''
-        sql='select * from fanbao'
+        //sql="select * from fanbao where shijian='"+zuotian+"'"
         $.ajax({
             type:"post",//请求服务器载入数据
             async: false,
-            url:"/mdata.php",
-            data:{
-              "sql": sql
+            url:"https://database.deta.sh/v1/c09fbak8/fanbao/query",
+            headers: {
+                "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
+                "Content-Type": "application/json"
             },
-            dataType:'html',
+            dataType:'json',
             success:function(co){
-                co=co.slice(20)
-                xw=JSON.parse(co)
+
+                xw=co.items
                 shijian=xw[0]['shijian']
                 for(var i=0;i<xw.length;i++){
                     dm=xw[i]['guid']
-                  $.ajax({
+     	            $.ajax({
                         type:"get",//请求服务器载入数据
                         async: false,
                         url:"https://qt.gtimg.cn/q=s_sz"+dm,
-                                         dataType:'html',//服务器返回json格式数据
-                                         crossDomain: true,
-                                         //data:"{}",                           
+                        dataType:'html',//服务器返回json格式数据
+                        crossDomain: true,
+                         //data:"{}",                           
                         success:function(xin){
                            cf = xin.split("~");
                            mz=cf[1];
@@ -126,7 +145,8 @@
                                 }
                             })
                                     
-
+                                    
+                                    
                                 }
                            })
                            
@@ -142,8 +162,12 @@
         biaoqian.innerHTML=neirong;
         
       }
-     </script>   
-     
+   
+      
+      
+      
+</script>	  
+	  
    
 
 
