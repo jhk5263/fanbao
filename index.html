@@ -103,7 +103,7 @@
                 shijian=xw[0]['shijian']
                 for(var i=0;i<xw.length;i++){
                     dm=xw[i]['guid']
-		    bankuai=xw[i]['bankuai']
+                    bankuai=xw[i]['bankuai']
      	            $.ajax({
                         type:"get",//请求服务器载入数据
                         async: false,
@@ -125,7 +125,8 @@
                                     $.ajax({
                                         type:"get",//请求服务器载入数据
                                         async: false,
-                                        url:'https://apphq.longhuvip.com/w1/api/index.php?DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&State=1&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrendIncremental&apiv=w30&c=StockL2Data',                                        dataType:'html',
+                                        url:'https://apphq.longhuvip.com/w1/api/index.php?DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&State=1&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrendIncremental&apiv=w30&c=StockL2Data',                                        
+                                        dataType:'html',
                                         success:function(co2){
                                             shuju1=JSON.parse(co2);
                                             jjj = shuju1.trend[0][3] * 100
@@ -139,7 +140,10 @@
                                             jin=((45/max)*jjj).toFixed(2);
                                             tu='<div style="background-color:#ef5350;height:'+zuo+';width:12%;text-align:center;"></div>'
                                             tu=tu+'<div style="background-color:#ef5350;height:'+jin+';width:12%;text-align: center;margin-left: -70%;"></div>'
-                                            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+dm+'|'+mz+'<span style="font-size:8px;font-weight:bolder">【'+bankuai+'】<span style="font-size:14px">昨日竞价量：'+zuojj+'</span><span style="font-size:14px">今日竞价量：'+jjj+'</span></h4></div></div></div>'                                    })
+                                            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+dm+'|'+mz+'<span style="font-size:8px;font-weight:bolder">【'+bankuai+'】<span style="font-size:14px">昨日竞价量：'+zuojj+'</span><span style="font-size:14px">今日竞价量：'+jjj+'</span></h4></div></div></div>'
+
+                                        }
+                                    })
                                 }
                             })
                                     
