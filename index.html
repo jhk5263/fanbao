@@ -122,19 +122,67 @@ function numFormat(num){
     return res;
 }            
 function zairu(){
-	var xingqi=new Date().getDay();
+        var xingqi=new Date().getDay();
         var h=new Date().getHours();
         var d =new Date();
         var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
-        var tou = document.getElementById("tou");
-        zuotian=getNextDate(time,-1);
-        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div></div>'
-        tou.innerHTML=jia;    
+        var zuotian=getNextDate(time,-1);
         var biaoqian = document.getElementById("biaoqian");
         var neirong=''
         var heji=[];
         var zbk=[];
-        //sql="select * from fanbao where shijian='"+zuotian+"'"
+        var jjbk=[];
+        var ddz='https://apphq.longhuvip.com/w1/api/index.php?Filter=0&FilterGem=0&FilterMotherboard=0&FilterTIB=0&Isst=0&Order=1&PhoneOSNew=2&REnd=0930&RStart=0925&Ratio=6&Type=6&VerSion=5.7.0.5&a=RealRankingInfo_W8&apiv=w31&c=NewStockRanking&index=0&st=35'
+        $.ajax({
+            type:"post",//请求服务器载入数据
+            async: false,
+            url:ddz,
+            dataType:'html',
+            success:function(sj){
+                sj=JSON.parse(sj);
+
+                for(var i=0;i<sj['list'].length;i++){
+                    if(sj['list'][i][0].slice(0,2)=="00"&&sj['list'][i][6]>=9.9){
+                    //console.log(sj['list'][i][1])
+                    //console.log(sj['list'][i][6])
+                    cf = sj['list'][i][4].split("、");
+                    for(var j=0;j<cf.length;j++){
+                        jjbk.push(cf[j])
+                    }
+                    }
+                }
+                var obj={}
+                  for(var i= 0, l = jjbk.length; i< l; i++){ 
+                        var item = jjbk[i]; 
+                        obj[item]= (obj[item] +1 ) || 1; 
+                } 
+
+                bk=Array.from(new Set(jjbk));
+                var bkk=[];
+                for(var i=0;i<bk.length;i++){
+                  var ob=new Object();
+                  ob.name=bk[i];
+                  ob.value=parseFloat(obj[ob.name]);
+                  bkk.push(ob);
+                }
+                jjbk=listSortBy(bkk,'value','desc');
+                
+
+            }
+          })
+        var tou = document.getElementById("tou");
+
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动<div class="line"></div><div style="position: relative;height: 100%;width: 100%;display: block;">'
+        //jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style//="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div>'
+        //jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><div></div>'
+        //jia=jia+'<a class="time-btn1 time-btn" href="#">'+jjbk[0]["name"]+':'+jjbk[0]["value"]+'</a></h2>';
+        for(var op=0;op<jjbk.length;op++){
+            //jia=jia+'<a class="time-btn1 time-btn" href="#" style="margin-right: 4px;">'+jjbk[op]["name"]+':'+jjbk[op]["value"]+'</a>';
+          jia=jia+'<a class="time-btn5 time-btn" href="#" style="margin-right: 4px;">'+jjbk[op]["name"]+':'+jjbk[op]["value"]+'</a>';
+            
+        }
+        jia=jia+'</div></h2>'
+        tou.innerHTML=jia; 
         $.ajax({
             type:"post",//请求服务器载入数据
             async: false,
