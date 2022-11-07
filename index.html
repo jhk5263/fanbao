@@ -122,6 +122,8 @@ function numFormat(num){
     return res;
 }            
 function zairu(){
+	var xingqi=new Date().getDay();
+        var h=new Date().getHours();
         var d =new Date();
         var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
         var tou = document.getElementById("tou");
@@ -149,20 +151,20 @@ function zairu(){
                 for(var i=0;i<xw.length;i++){
                     dm=xw[i]['guid']
                     bankuai=xw[i]['bankuai']
-     	            $.ajax({
-                        type:"get",//请求服务器载入数据
-                        async: false,
-                        url:"https://qt.gtimg.cn/q=s_sz"+dm,
-                        dataType:'html',//服务器返回json格式数据
-                        crossDomain: true,
-                         //data:"{}",                           
-                        success:function(xin){
-                           cf = xin.split("~");
-                           mz=cf[1];
+		    mz=xw[i]['mingzi']
+	           if(h>=15&&0>xingqi<6){
+                       dz='https://apphq.longhuvip.com/w1/api/index.php?DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&State=1&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrendIncremental&apiv=w30&c=StockL2Data'
+                   }
+                   else{
+                      dz='https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History'
+                   }
+                   if (xingqi==6||xingqi==0){
+                     dz='https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History'
+                   }
                             $.ajax({
                                 type:"get",//请求服务器载入数据
                                 async: false,
-                                url:'https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History',
+                                url:dz,
                                 dataType:'html',
                                 success:function(co1){
                                     shuju=JSON.parse(co1);
@@ -204,8 +206,7 @@ function zairu(){
                                     
                                     
                                     
-                                }
-                           })
+
                            
                         }
             }
