@@ -1199,7 +1199,7 @@ span.typed-cursor {
 /* ################ Job-post-area Css ################ */
 .bg-color2 {
   background: #F6F7F9; 
-  height: 100%;
+  height: auto;
 }
 
 /* ################ Apps-download-area ################ */
