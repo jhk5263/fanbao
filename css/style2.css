@@ -1817,8 +1817,7 @@ input[type=checkbox] + label {
   cursor: pointer;
   padding: 0.2em; }
 
-input[type=checkbox] {
-  display: none; }
+
 
 input[type=checkbox] + label:before {
   content: "";
