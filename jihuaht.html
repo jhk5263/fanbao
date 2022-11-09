@@ -1,0 +1,482 @@
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+    <title>计划后台</title>
+    <!-- Favicon -->
+    <link rel="icon" href="img/fanbao/3.png" type="image/png" sizes="32x32">
+    <!-- All CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/aos.min.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/magnific.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/select2.min.css">
+    <link rel="stylesheet" href="css/slimmenu.min.css">
+    <link rel="stylesheet" href="css/style2.css">
+    <!-- Google font<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> -->
+
+<body onload="zairu()">
+      <main class="main-content-area" >
+
+         <!--job-categories-area-start -->
+         <div class="job-categories-area bg-color2 pt-100 pb-100 clearfix">
+                         <div class="container">
+               <div class="row" style="display:block">
+                  <div class="col-md-12">
+                 <input id='sla' type="text" style="display:none;">
+                     <div class="section-title text-left" style="margin-bottom:10px;margin-top:-50px" id="tou">
+
+                     </div>
+                  </div>
+          					<div class="search-bar " style="padding:10px;padding-top:1.5%">
+				            
+							 <div class="col-md-3" style="max-width:100%;">
+							     <div class="slider-btn">
+								<div class="buttonfx btn-green" style="width: 79%;"><input type="search" placeholder="黏贴在这,单独上传用@区隔，支持代码@代码，文字@文字，多个有问题" onblur="huoqu()" id="piao" ></div>
+								<div class="btn-trasparent-green buttonfx curtainup" style="width: 18%;padding-left: 1%;"><button type="submit" class="buttonfx curtainup" style="background: transparent;color: white;border: 3px solid #fff;/* padding-left: 1; */" onclick="shangchuan()">上传</button></div>
+								<input type="checkbox" checked="checked" id="scjt" >
+								</div>
+							 </div>
+					</div> 
+
+	
+					
+					
+               </div>
+              
+               <div class="cat-list-items" >
+                  <div class="row" id="biaoqian"style="margin-top:3%">
+
+
+                  </div>
+               </div> 
+               
+               
+
+            </div>
+
+
+
+
+               </div>
+               
+               
+               
+
+            </div>
+         </div>
+         <!--job-categories-area-end -->
+         
+
+      <!-- ==================== END PRELOADER HERE ===================================== -->		
+      <!-- ====================ALL JS FILE HERE===================================== -->
+      <!-- jQuery -->
+	  <script src="js/jquery-3.4.1.min.js"></script>
+	  <script src="js/bootstrap.min.js"></script>
+	  <script src="js/proper.js"></script>
+	  <script src="js/jquery.waypoints.min.js"></script>
+	  <script src="js/owl.carousel.min.js"></script>
+	  <script src="js/magnific.min.js"></script>
+	  <script src="js/typing.min.js"></script>
+	  <script src="js/select2.min.js"></script>
+	  <script src="js/aos.min.js"></script>
+	  <script src="js/slimmenu.min.js"></script>
+	      <script src="js/gbk.js"></script>
+	  <!-- vendor 
+      <script src="assets/js/vendor.min.js"></script>
+	   -->
+      <script src="js/app.js"></script>  
+      <script>
+        function checkTime(i){
+        	if (i<10) 
+          {i="0" + i}
+          
+          return i
+         
+        };
+function getNextDate(date, day,callback){
+        var dd = new Date(date);
+        dd.setDate(dd.getDate() + day);
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+        var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+        var changedate = y + "-" + m + "-" + d;
+        return changedate
+};
+function listSortBy(arr, field, order){
+    var refer = [], result=[], order = order=='asc'?'asc':'desc', index;
+    for(i=0; i<arr.length; i++){
+        refer[i] = arr[i][field]+':'+i;
+    }
+        refer.sort(function (a,b) {
+            a=parseFloat(a);
+            b=parseFloat(b);
+            if (a < b ) {    
+                return -1;
+            }
+            if (a > b ) {
+                return 1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+
+
+    if(order=='desc') refer.reverse();
+    for(i=0;i<refer.length;i++){
+        index = refer[i].split(':')[1];
+        result[i] = arr[index];
+    }
+    return result;
+}
+function numFormat(num){
+    num=num.toString().split(".");  // 分隔小数点
+    var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
+    var res=[];
+    for(var i=0,len=arr.length;i<len;i++){
+      if(i%3===0&&i!==0){
+         res.push(",");   // 添加分隔符
+      }
+      res.push(arr[i]);
+    }
+    res.reverse(); // 再次倒序成为正确的顺序
+    if(num[1]){  // 如果有小数的话添加小数部分
+      res=res.join("").concat("."+num[1]);
+    }else{
+      res=res.join("");
+    }
+    return res;
+}
+ function htmltag(str) {
+    str = str.replace(/<\/?[^>]*>/g, '') // 去除HTML tag
+    str = str.replace(/[ | ]*\n/g, '\n') // 去除行尾空白
+    str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+    str = str.replace(/ /ig, '') // 去掉
+    const arrEntities = { 'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"' } // 转义符换成普通字符
+    str = str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function(all, t) { return arrEntities[t] })
+    return str
+ }
+  
+  
+  
+function shangchuan(){
+    sl=$("#sla").val()
+    var d =new Date();
+    var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
+
+    sql="SELECT * FROM jiaoyiri where shijian>'"+time+"'";
+    if(document.getElementById("scjt").checked==false){sql="SELECT * FROM jiaoyiri where shijian<='"+time+"'order by shijian desc";}//未选中择上传今天
+    var dz = "dadan.php?sql="+sql;
+     $.ajax({
+        type:"get",//请求服务器载入数据
+        async: false,
+        url:dz,
+        dataType:'json',//服务器返回json格式数据
+       
+        success:function(xin){                     
+            //console.log(xin)
+            shuju=xin
+            shijian=shuju[0]['shijian']
+        }
+     })
+     console.log(sl)
+    for(var i=0;i<sl;i++){
+    mzdm = document.getElementById("mzdm"+i).innerText;
+    mzdm =mzdm.split(",")
+    dm=mzdm[0];
+    mz=mzdm[1];
+    guo=$("#guo"+i).val();
+    bupo=$("#bupo"+i).val();
+    jhd=document.getElementById("jhd"+i).checked;
+    if(jhd==false){
+        //neirong='过：'+guo+'\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0'+'不破：'+bupo
+        neirong=guo+','+bupo;
+    }
+    else{
+        neirong='机会大 看趋势'
+    }
+    key=dm+shijian;
+    $.ajax({
+    type:"PUT",//请求服务器载入数据
+    async: false,
+    url:"https://database.deta.sh/v1/c09fbak8/jihua/items",
+    headers:{
+        "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
+        "Content-Type": "application/json"
+    },
+    data:'{"items":[{"key":"'+key+'","dm":"'+dm+'","mz":"'+mz+'","neirong":"'+neirong+'","shijian":"'+shijian+'"}]}',
+    dataType:'json',
+    success:function(co){
+    }
+    })
+    }
+    alert('上传完成！')
+    
+}
+function huoqu(){
+            jia="";
+        biaoqian.innerHTML="";
+        var shuju = $("#piao").val();
+   
+        if(shuju.indexOf(",")==-1){
+            if(shuju.indexOf("@")==-1){
+                if(isNaN(shuju)==true){//判断是不是非数字
+                  bianma=$URL.encode(shuju);
+                  console.log(bianma)
+                   $.ajax({
+                                type:"get",//请求服务器载入数据
+                                async: false,
+                                url:"https://q.stock.sohu.com/app1/stockSearch?method=search&type=all&keyword="+bianma+"&rt=jsonp",
+                             dataType:'jsonp',//服务器返回json格式数据
+                             jsonpCallback:'callback',
+                             jsonp: 'callback',
+                             crossDomain: true,
+                             //data:"{}",
+                             ContentType:'application/javascript',
+                success:function(co){
+                    if(co.result.length==0){alert("输入有误，重新输入")}
+                    dm=co.result[0][1];
+                    mz=htmltag(co.result[0][2]);
+                    hj=dm+','+mz
+                    jia=jia+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm0"><input type="radio"  id="jhd0">'+hj+'<input type="email" placeholder="过"  id="guo0" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo0" style="margin-top:5%"></h4></div></div>'
+                    biaoqian.innerHTML=jia;
+ 
+                }
+                   })
+
+            }
+            else{
+             mama=shuju;
+            $.ajax({
+                type:"get",//请求服务器载入数据
+               // async: false,
+                url:"https://np-anotice-stock.eastmoney.com/api/security/ann?page_size=50&page_index=1&ann_type=A&client_source=web&stock_list="+mama+"&f_node=0&s_node=0&rt=jsonp",
+                             dataType:'jsonp',//服务器返回json格式数据
+                             jsonpCallback:'cb',
+                             jsonp: 'cb',
+                             crossDomain: true,
+                             
+                             //data:"{}",                         
+                success:function(xin){
+                    mz=xin.data.list[0].codes[0].short_name;
+                    hj=mama+','+mz
+                    jia=jia+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm0"><input type="radio"  id="jhd0">'+hj+'<input type="email" placeholder="过"  id="guo0" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo0" style="margin-top:5%"></h4></div></div>'
+                    biaoqian.innerHTML=jia;
+                }
+            })
+            
+                
+            }
+             document.getElementById('sla').value=1;
+            }
+            else{//多个同时上传，用@区隔
+            shuju=shuju.split("@")
+            document.getElementById('sla').value=shuju.length;
+            if(isNaN(shuju[0])==true){//判断是不是非数字
+                
+                for(var i=0,len=shuju.length;i<len;i++){
+                  bianma=$URL.encode(shuju[i]);
+                   $.ajax({
+                                type:"get",//请求服务器载入数据
+                                //async: false,
+                                url:"https://q.stock.sohu.com/app1/stockSearch?method=search&type=all&keyword="+bianma+"&rt=jsonp",
+                             dataType:'jsonp',//服务器返回json格式数据
+                             jsonpCallback:'callback',
+                             jsonp: 'callback',
+                             crossDomain: true,
+                             //data:"{}",
+                             ContentType:'application/javascript',
+                success:function(co){
+                    if(co.result.length==0){alert("输入有误，重新输入")}
+                    dm=co.result[0][1];
+                    mz=htmltag(co.result[0][2]);
+                    hj=dm+','+mz
+                    jia='<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm0"><input type="radio"  id="jhd0">'+hj+'<input type="email" placeholder="过"  id="guo0" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo0" style="margin-top:5%"></h4></div></div>'
+                    biaoqian.innerHTML=biaoqian.innerHTML+jia;
+
+                }
+                   })
+                }
+            }
+            else{
+                for(var i=0,len=shuju.length;i<len;i++){
+                    mama=shuju[i];
+                    console.log(mama)
+            $.ajax({
+                type:"get",//请求服务器载入数据
+                async: false,
+                url:"https://np-anotice-stock.eastmoney.com/api/security/ann?page_size=50&page_index=1&ann_type=A&client_source=web&stock_list="+mama+"&f_node=0&s_node=0&rt=jsonp",
+                             dataType:'jsonp',//服务器返回json格式数据
+                             jsonpCallback:'cb',
+                             jsonp: 'cb',
+                             crossDomain: true,
+                             
+                             //data:"{}",                         
+                success:function(xin){
+                    mz=xin.data.list[0].codes[0].short_name;
+                    hj=mama+','+mz
+                    console.log(mama)
+                    console.log(mz)
+                    jia='<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm0"><input type="radio"  id="jhd0">'+hj+'<input type="email" placeholder="过"  id="guo0" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo0" style="margin-top:5%"></h4></div></div>'
+                    console.log(jia)
+                    biaoqian.innerHTML=biaoqian.innerHTML+jia;
+
+
+                }
+            })
+                              
+                }
+
+            }
+            }
+            
+
+        }
+        
+        else{
+        shuju=shuju.split("  ")
+
+        i=-1;
+        if(shuju[0]!=""){
+        for(var i=0,len=shuju.length;i<len;i++){
+            jia=jia+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 value="'+shuju[i]+'"style="font-size:16px" id="mzdm'+i+'"><input type="radio"  id="jhd'+i+'">'+shuju[i]+'<input type="email" placeholder="过"  id="guo'+i+'" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo'+i+'" style="margin-top:5%"></h4></div></div>'
+        }
+        }
+        else{
+        jia=jia+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm'+(i+1)+'"><input type="radio"  id="jhd'+(i+1)+'">600516,方大碳素<input type="email" placeholder="过"  id="guo'+(i+1)+'" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo'+(i+1)+'" style="margin-top:5%"></h4></div></div>'+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm'+(i+2)+'"><input type="radio"  id="jhd'+(i+2)+'">600375,汉马科技<input type="email" placeholder="过"  id="guo'+(i+2)+'" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo'+(i+2)+'" style="margin-top:5%"></h4></div></div>'+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;background: white;"><h4 style="font-size:16px" id="mzdm'+(i+3)+'"><input type="radio"  id="jhd'+(i+3)+'">000912,泸天化<input type="email" placeholder="过"  id="guo'+(i+3)+'" style="margin-top:5%"><input type="email" placeholder="不破"  id="bupo'+(i+3)+'" style="margin-top:5%"></h4></div></div>';
+        }
+
+        document.getElementById('sla').value=shuju.length;
+        if(shuju[0]==""){document.getElementById('sla').value=3}
+        }
+
+        biaoqian.innerHTML=jia;
+        
+}
+
+
+
+function zairu(){
+        var tou = document.getElementById("tou");
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH<input type="checkbox" id="nextday" onchange="huan()"></span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">财富计划<div class="line"></div><div></h2>'
+        tou.innerHTML=jia;
+
+        $.ajax({
+            type:"post",//请求服务器载入数据s
+            async: false,
+            url:"https://database.deta.sh/v1/c09fbak8/jihua/query",
+            headers: {
+                "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
+                "Content-Type": "application/json"
+            },
+            dataType:'json',
+            success:function(co){
+                var d =new Date();
+                var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
+
+                sql="SELECT * FROM jiaoyiri where shijian<='"+time+"' ORDER BY shijian desc";
+                var dz = "dadan.php?sql="+sql;
+                 $.ajax({
+                    type:"get",//请求服务器载入数据
+                    async: false,
+                    url:dz,
+                    dataType:'json',//服务器返回json格式数据
+                   
+                    success:function(xin){                     
+                        shuju=xin
+                        shijian=shuju[0]['shijian']
+                    }
+                 })
+                neirong="";
+                $.ajax({
+                type:"post",//请求服务器载入数据
+                async: false,
+                url:"https://database.deta.sh/v1/c09fbak8/jihua/query",
+                headers: {
+                    "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
+                    "Content-Type": "application/json"
+                },
+                data:'{"query":[{"shijian":"'+shijian+'"}]}',
+                dataType:'json',
+                success:function(co){
+                    xw=co.items
+                    for(var i=0;i<xw.length;i++){
+                    zh=xw[i]['neirong'].split(',')
+                    if(zh[1]==undefined){zh[1]=""}
+                    neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;"><div class="cat-details"><h4 style="font-size:20px">'+xw[i]['dm']+'|'+xw[i]['mz']+'<span style="font-size:18px;margin-top: 6%;color: red;">过：'+zh[0]+'</span><span style="font-size:18px;margin-top: 6%;color: green;margin-bottom: 6%;">不破：'+zh[1]+'</span></h4></div></div></div>'
+                    }
+                }
+                })
+                
+            }
+        })
+        biaoqian.innerHTML=neirong;
+}
+   
+function huan(){
+        biaoqian.innerHTML="";
+        next=document.getElementById("nextday").checked
+        $.ajax({
+            type:"post",//请求服务器载入数据s
+            async: false,
+            url:"https://database.deta.sh/v1/c09fbak8/jihua/query",
+            headers: {
+                "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
+                "Content-Type": "application/json"
+            },
+            dataType:'json',
+            success:function(co){
+                var d =new Date();
+                var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
+                if(next==true){
+                    sql="SELECT * FROM jiaoyiri where shijian>'"+time+"' ORDER BY shijian desc";
+                }
+                else{
+                sql="SELECT * FROM jiaoyiri where shijian<='"+time+"' ORDER BY shijian desc";
+                }
+                var dz = "dadan.php?sql="+sql;
+                 $.ajax({
+                    type:"get",//请求服务器载入数据
+                    async: false,
+                    url:dz,
+                    dataType:'json',//服务器返回json格式数据
+                   
+                    success:function(xin){                     
+                        shuju=xin
+                        shijian=shuju[0]['shijian']
+                    }
+                 })
+                neirong="";
+                $.ajax({
+                type:"post",//请求服务器载入数据
+                async: false,
+                url:"https://database.deta.sh/v1/c09fbak8/jihua/query",
+                headers: {
+                    "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
+                    "Content-Type": "application/json"
+                },
+                data:'{"query":[{"shijian":"'+shijian+'"}]}',
+                dataType:'json',
+                success:function(co){
+                    xw=co.items
+                    for(var i=0;i<xw.length;i++){
+                    zh=xw[i]['neirong'].split(',')
+                    if(zh[1]==undefined){zh[1]=""}
+                    neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;"><div class="cat-details"><h4 style="font-size:20px">'+xw[i]['dm']+'|'+xw[i]['mz']+'<span style="font-size:18px;margin-top: 6%;color: red;">过：'+zh[0]+'</span><span style="font-size:18px;margin-top: 6%;color: green;margin-bottom: 6%;">不破：'+zh[1]+'</span></h4></div></div></div>'
+                    }
+                }
+                })
+                
+            }
+        })
+        biaoqian.innerHTML=neirong;
+}   
+      
+      
+</script>	  
+	  
+   
+
+
+</body></html>
