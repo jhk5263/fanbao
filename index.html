@@ -224,6 +224,9 @@ function zairu(){
                                         dataType:'html',
                                         success:function(co2){
                                             shuju1=JSON.parse(co2);
+					    zuosp=shuju1.preclose_px
+                                            jinkp=shuju1.begin_px
+                                            jjzf=((jinkp-zuosp)/zuosp*100).toFixed(2)+'%';
                                             jjj = shuju1.trend[0][3] * 100
   
                                             shuzu=[]
@@ -243,7 +246,8 @@ function zairu(){
                                             row.bankuai = bankuai;
                                             row.zuojj = zuojj;
                                             row.jjj = jjj;
-                                            row.chazhi = chazhi
+                                            row.chazhi = chazhi;
+					    row.jjzf=jjzf;
                                             heji.push(row)
 
 
@@ -264,7 +268,7 @@ function zairu(){
         for(var cc=0;cc<heji.length;cc++){
             tu='<div style="background-color:#ef5350;height:'+heji[cc]['jin']+';width:12%;text-align:center;"></div>'
             tu=tu+'<div style="background-color:#ef5350;height:'+heji[cc]['zuo']+';width:12%;text-align: center;margin-left: -70%;"></div>'
-            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><a href="http://www.treeid/breed_0'+heji[cc]['dm']+'"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+heji[cc]['dm']+'|'+heji[cc]['mz']+'<span style="font-size:10px;font-weight:bolder">【'+heji[cc]['bankuai']+'】<span style="font-size:14px;">昨日竞价量：'+heji[cc]['zuojj']+'</span><span style="font-size:14px">今日竞价量：'+heji[cc]['jjj']+'</span></h4></div></a></div></div>'
+            neirong=neirong+'<div class="col-md-3" style="padding-right:0px"><div class="single-category text-center" style="padding:10px;margin-top:10px"><a href="http://www.treeid/breed_0'+heji[cc]['dm']+'"><div class="cat-icon" style="display:flex;justify-content: space-around;align-items: flex-end;transform:rotateY(180deg)">'+tu+'</div><div class="cat-details"><h4 style="font-size:16px">'+heji[cc]['dm']+'|'+heji[cc]['mz']+'<span style="font-size:10px;font-weight:bolder">【'+heji[cc]['bankuai']+'】<span style="font-size:14px;color:red">竞价涨幅：'+heji[cc]['jjzf']+'</span><span style="font-size:14px;">昨日竞价量：'+heji[cc]['zuojj']+'</span><span style="font-size:14px">今日竞价量：'+heji[cc]['jjj']+'</span></h4></div></a></div></div>'
         }
         biaoqian.innerHTML=neirong;
         
@@ -351,6 +355,7 @@ for(var aa=1;aa<6;aa++){
                                             row.zuojj = zuojj;
                                             row.jjj = jjj;
                                             row.chazhi = chazhi
+					
                                             heji.push(row)
 
 
