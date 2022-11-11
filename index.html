@@ -170,10 +170,40 @@ function zairu(){
 
             }
           })
-        var tou = document.getElementById("tou");
+        var shijian = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
+        zuosj=''
+         sql="SELECT * FROM jiaoyiri where shijian<'"+shijian+"' ORDER BY shijian desc";
 
-        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动<div class="line"></div><div>'
-        //jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/3.png" alt="image" style//="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div>'
+                 $.ajax({
+                    type:"get",//请求服务器载入数据
+                    async: false,
+                    url:"dadan.php?sql="+sql,
+                    dataType:'json',//服务器返回json格式数据
+                   
+                    success:function(xin){                     
+                        shuju=xin
+                        zuosj=shuju[0]['shijian']
+                    }
+                 })
+            
+        if((h>15&&0<xingqi<6)||xingqi==0||xingqi==6){
+                sql="SELECT * FROM jiaoyiri where shijian>'"+shijian+"' ORDER BY shijian asc";
+                 $.ajax({
+                    type:"get",//请求服务器载入数据
+                    async: false,
+                    url:"dadan.php?sql="+sql,
+                    dataType:'json',//服务器返回json格式数据
+                   
+                    success:function(xin){                     
+                        shuju=xin
+                        shijian=shuju[0]['shijian']
+
+                    }
+                 })
+        }
+        var tou = document.getElementById("tou");
+        jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+shijian+'【日期不是今天时，显示的是下个交易日观察的个股】</span><h2><img src="img/fanbao/3.png" alt="image" style="width:55px;margin-top: -10px;">反包行动<div class="line"></div><div>'
+        //jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><h2><img src="img/fanbao/3.png" alt="image" style//="width:55px;margin-top: -10px;">反包行动</h2><div class="line"></div>'
         //jia='<span style="font-size:16px;font-weight:bolder">GET RICH--'+time+'</span><div></div>'
         //jia=jia+'<a class="time-btn1 time-btn" href="#">'+jjbk[0]["name"]+':'+jjbk[0]["value"]+'</a></h2>';
         for(var op=0;op<jjbk.length;op++){
@@ -182,7 +212,7 @@ function zairu(){
             
         }
         jia=jia+'</div></h2>'
-        tou.innerHTML=jia; 
+        tou.innerHTML=jia;  
         $.ajax({
             type:"post",//请求服务器载入数据
             async: false,
@@ -191,6 +221,7 @@ function zairu(){
                 "X-API-Key": "c09fbak8_t5xM14cLspZavJko8fPJdc4WDu6mK7HG",
                 "Content-Type": "application/json"
             },
+	    data:'{"query":[{"shijian":"'+shijian+'"}]}',
             dataType:'json',
             success:function(co){
 
@@ -200,15 +231,7 @@ function zairu(){
                     dm=xw[i]['guid']
                     bankuai=xw[i]['bankuai']
 		    mz=xw[i]['mingzi']
-	           if(h>=15&&0>xingqi<6){
-                       dz='https://apphq.longhuvip.com/w1/api/index.php?DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&State=1&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrendIncremental&apiv=w30&c=StockL2Data'
-                   }
-                   else{
-                      dz='https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History'
-                   }
-                   if (xingqi==6||xingqi==0){
-                     dz='https://apphis.longhuvip.com/w1/api/index.php?Day='+shijian+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History'
-                   }
+                      dz='https://apphis.longhuvip.com/w1/api/index.php?Day='+zuosj+'&DeviceID=5a649d0e7243e127e4c0746687ab65f08f6c36e1&PhoneOSNew=2&StockID=' + dm + '&Token=f94a117fb8b93f606835a54bf034375d&UserID=1249058&VerSion=5.6.0.3&a=GetStockTrend&apiv=w30&c=StockL2History'
                             $.ajax({
                                 type:"get",//请求服务器载入数据
                                 async: false,
