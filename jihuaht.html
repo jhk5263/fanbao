@@ -167,7 +167,7 @@ function shangchuan(){
 
     sql="SELECT * FROM jiaoyiri where shijian>'"+time+"'";
     if(document.getElementById("scjt").checked==false){sql="SELECT * FROM jiaoyiri where shijian<='"+time+"'order by shijian desc";}//未选中择上传今天
-    var dz = "dadan.php?sql="+sql;
+    var dz = "https://t.taotiles.online:52631/dadan.php?sql="+sql;
      $.ajax({
         type:"get",//请求服务器载入数据
         async: false,
@@ -376,7 +376,7 @@ function zairu(){
                 var time = checkTime(d.getFullYear()) + '-' + checkTime((d.getMonth() + 1)) + '-' + checkTime(d.getDate());
 
                 sql="SELECT * FROM jiaoyiri where shijian<='"+time+"' ORDER BY shijian desc";
-                var dz = "dadan.php?sql="+sql;
+                var dz = "https://t.taotiles.online:52631/dadan.php?sql="+sql;
                  $.ajax({
                     type:"get",//请求服务器载入数据
                     async: false,
@@ -435,7 +435,7 @@ function huan(){
                 else{
                 sql="SELECT * FROM jiaoyiri where shijian<='"+time+"' ORDER BY shijian desc";
                 }
-                var dz = "dadan.php?sql="+sql;
+                var dz = "https://t.taotiles.online:52631/dadan.php?sql="+sql;
                  $.ajax({
                     type:"get",//请求服务器载入数据
                     async: false,
